@@ -80,6 +80,7 @@ RUN \
     apt-get install -yq --no-install-recommends \
         ca-certificates \
         curl \
+        jq \
         libgdiplus \
         libicu-dev \
         libssl1.1 \

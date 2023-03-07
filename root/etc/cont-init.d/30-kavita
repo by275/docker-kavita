@@ -1,0 +1,11 @@
+#!/usr/bin/with-contenv bash
+
+mkdir -p "${KAVITA_CONFIG_DIR}"
+
+if [ ! -f "${KAVITA_CONFIG_FILE}" ]; then
+    echo "*** Using default appsettings.json"
+    cp "/defaults/appsettings.json" "${KAVITA_CONFIG_FILE}"
+fi
+
+find "$KAVITA_CONFIG_DIR" \! \( -uid $(id -u abc) -gid $(id -g abc) \) -print0 | \
+    xargs -0 --no-run-if-empty chown -h abc:abc

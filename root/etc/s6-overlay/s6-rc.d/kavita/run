@@ -1,0 +1,8 @@
+#!/usr/bin/with-contenv bash
+
+cd /kavita
+
+cmd="/kavita/Kavita"
+echo "*** executing => $cmd"
+exec s6-setuidgid abc \
+    $cmd

@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv bash
+
+if [ "$ATIVAK" = "1" ]; then
+    fusermount3 -uz /ativak/config
+fi

@@ -17,3 +17,19 @@ fi
 
 find "$KAVITA_CONFIG_DIR" \! \( -uid $(id -u abc) -gid $(id -g abc) \) -print0 | \
     xargs -0 --no-run-if-empty chown -h abc:abc
+
+if [ "$ATIVAK" = "1" ]; then
+    rm -rf \
+        /overlay/work \
+        /ativak/config && \
+    mkdir -p \
+        /overlay/{upper,work} \
+        /ativak/config
+
+    mount -t overlay overlay \
+        -o lowerdir=/kavita/config,upperdir=/overlay/upper,workdir=/overlay/work \
+        /ativak/config
+
+    find /ativak/config \! \( -uid $(id -u abc) -gid $(id -g abc) \) -print0 | \
+        xargs -0 --no-run-if-empty chown -h abc:abc
+fi

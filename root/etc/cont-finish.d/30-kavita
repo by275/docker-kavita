@@ -1,0 +1,6 @@
+#!/usr/bin/with-contenv bash
+
+if [ "$ATIVAK" = "1" ]; then
+    fusermount -uz /ativak/config
+    fusermount -uz /tmp/overlay
+fi

@@ -1,8 +1,12 @@
 #!/usr/bin/with-contenv bash
 
-cd /kavita
+if [ "$ATIVAK" = "1" ]; then
+    cd /ativak
+else
+    cd /kavita
+fi
 
-cmd="/kavita/Kavita"
+cmd="./Kavita"
 echo "*** executing => $cmd"
 exec s6-setuidgid abc \
     $cmd

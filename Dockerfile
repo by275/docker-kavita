@@ -21,6 +21,7 @@ RUN \
     echo "**** directories ****" && \
     mkdir -p \
         /bar/defaults \
+        /bar/ativak \
         /bar/kavita
 
 # add kavita
@@ -40,6 +41,19 @@ RUN \
 COPY patch/API.dll_0.5.4.0_patch_1 /bar/kavita/API.dll
 COPY patch/API.pdb_0.5.4.0_patch_1 /bar/kavita/API.pdb
 
+# add ativak
+RUN \
+    ARCH="$(dpkg --print-architecture)" && \
+    if [ $ARCH = "amd64" ]; then KAVITA_ARCH="x64"; \
+    elif [ $ARCH = "arm64" ]; then KAVITA_ARCH="arm64"; \
+    elif [ $ARCH = "armhf" ]; then KAVITA_ARCH="arm"; \
+    else echo "UNKNOWN ARCH: $ARCH" && exit 1; fi && \
+    ATIVAK_VER="$(curl -fsSL https://api.github.com/repos/Kareadita/Kavita/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')" && \
+    echo "**** installing kavita ${ATIVAK_VER} ${KAVITA_ARCH} ****" && \
+    downloadURL="https://github.com/Kareadita/Kavita/releases/download/${ATIVAK_VER}/kavita-linux-${KAVITA_ARCH}.tar.gz" && \
+    curl -sL "$downloadURL" | tar -zxf - -C /bar/ativak --strip-components=1 && \
+    rm -rf /bar/ativak/config
+
 # add local files
 COPY root/ /bar/
 
@@ -48,7 +62,9 @@ RUN \
     echo "**** permissions ****" && \
     chmod a+x \
         /bar/kavita/Kavita \
+        /bar/ativak/Kavita \
         /bar/etc/cont-init.d/* \
+        /bar/etc/cont-finish.d/* \
         /bar/etc/s6-overlay/s6-rc.d/*/run
 
 RUN \
@@ -80,11 +96,13 @@ RUN \
     apt-get install -yq --no-install-recommends \
         ca-certificates \
         curl \
+        fuse \
         jq \
         libgdiplus \
         libicu-dev \
         libssl1.1 \
         && \
+    sed -i 's/#user_allow_other/user_allow_other/' /etc/fuse.conf && \
     echo "**** cleanup ****" && \
     apt-get clean autoclean && \
     apt-get autoremove -y && \

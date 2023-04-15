@@ -4,7 +4,7 @@ mkdir -p "${KAVITA_CONFIG_DIR}"
 
 if [ ! -f "${KAVITA_CONFIG_FILE}" ]; then
     if [ -f "${KAVITA_GDS_TAR}" ]; then
-        echo "*** Using $(basename ${KAVITA_GDS_TAR}). Please be patient..."
+        echo "*** Using $(basename "${KAVITA_GDS_TAR}"). Please be patient..."
         tar -C "$KAVITA_CONFIG_DIR" -zxf "${KAVITA_GDS_TAR}" --strip-components=1
         jq -r '.TokenKey = "super secret unguessable key"' "${KAVITA_CONFIG_FILE}" > /tmp/tmp.json && \
             mv /tmp/tmp.json "${KAVITA_CONFIG_FILE}"
@@ -15,7 +15,7 @@ if [ ! -f "${KAVITA_CONFIG_FILE}" ]; then
     cp "/defaults/appsettings.json" "${KAVITA_CONFIG_FILE}"
 fi
 
-find "$KAVITA_CONFIG_DIR" \! \( -uid $(id -u abc) -gid $(id -g abc) \) -print0 | \
+find "$KAVITA_CONFIG_DIR" \! \( -uid "$(id -u abc)" -gid "$(id -g abc)" \) -print0 | \
     xargs -0 --no-run-if-empty chown -h abc:abc
 
 if [ "$ATIVAK" = "1" ]; then
@@ -30,6 +30,6 @@ if [ "$ATIVAK" = "1" ]; then
         -o lowerdir=/kavita/config,upperdir=/overlay/upper,workdir=/overlay/work \
         /ativak/config
 
-    find /ativak/config \! \( -uid $(id -u abc) -gid $(id -g abc) \) -print0 | \
+    find /ativak/config \! \( -uid "$(id -u abc)" -gid "$(id -g abc)" \) -print0 | \
         xargs -0 --no-run-if-empty chown -h abc:abc
 fi

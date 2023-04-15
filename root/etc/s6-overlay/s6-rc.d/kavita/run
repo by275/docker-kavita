@@ -1,9 +1,9 @@
 #!/usr/bin/with-contenv bash
 
 if [ "$ATIVAK" = "1" ]; then
-    cd /ativak
+    cd /ativak || exit 1
 else
-    cd /kavita
+    cd /kavita || exit 1
 fi
 
 cmd="./Kavita"

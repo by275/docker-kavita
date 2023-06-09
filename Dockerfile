@@ -136,6 +136,7 @@ COPY --from=builder /bar/ /
 ENV \
     S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     TZ=Asia/Seoul \
+    DOTNET_RUNNING_IN_CONTAINER=true \
     KAVITA_CONFIG_DIR="/kavita/config" \
     KAVITA_CONFIG_FILE="/kavita/config/appsettings.json"
 

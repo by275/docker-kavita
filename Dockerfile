@@ -8,7 +8,8 @@ FROM ghcr.io/by275/base:ubuntu AS prebuilt
 # 
 FROM base AS builder
 
-ARG KAVITA_VER=0.5.4
+ARG KAVITA_VER=v0.5.4
+ARG ATIVAK_VER
 
 ARG DEBIAN_FRONTEND="noninteractive"
 
@@ -31,8 +32,8 @@ RUN \
     elif [ $ARCH = "arm64" ]; then KAVITA_ARCH="arm64"; \
     elif [ $ARCH = "armhf" ]; then KAVITA_ARCH="arm"; \
     else echo "UNKNOWN ARCH: $ARCH" && exit 1; fi && \
-    echo "**** installing kavita v${KAVITA_VER} ${KAVITA_ARCH} ****" && \
-    downloadURL="https://github.com/Kareadita/Kavita/releases/download/v${KAVITA_VER}/kavita-linux-${KAVITA_ARCH}.tar.gz" && \
+    echo "**** installing kavita ${KAVITA_VER} ${KAVITA_ARCH} ****" && \
+    downloadURL="https://github.com/Kareadita/Kavita/releases/download/${KAVITA_VER}/kavita-linux-${KAVITA_ARCH}.tar.gz" && \
     curl -sL "$downloadURL" | tar -zxf - -C /bar/kavita --strip-components=1 && \
     mv /bar/kavita/config/appsettings.json /bar/defaults/ && \
     rm -rf /bar/kavita/config
@@ -48,10 +49,6 @@ RUN \
     elif [ $ARCH = "arm64" ]; then KAVITA_ARCH="arm64"; \
     elif [ $ARCH = "armhf" ]; then KAVITA_ARCH="arm"; \
     else echo "UNKNOWN ARCH: $ARCH" && exit 1; fi && \
-    apt-get update && \
-    apt-get install -yq --no-install-recommends \
-        jq && \
-    ATIVAK_VER="$(curl -fsSL https://api.github.com/repos/Kareadita/Kavita/releases/latest | jq -r '.tag_name')" && \
     echo "**** installing kavita ${ATIVAK_VER} ${KAVITA_ARCH} ****" && \
     downloadURL="https://github.com/Kareadita/Kavita/releases/download/${ATIVAK_VER}/kavita-linux-${KAVITA_ARCH}.tar.gz" && \
     curl -sL "$downloadURL" | tar -zxf - -C /bar/ativak --strip-components=1 && \

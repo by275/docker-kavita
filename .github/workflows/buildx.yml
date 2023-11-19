@@ -30,6 +30,11 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHCR_PAT }}
       -
+        name: Set global environment variables
+        shell: bash
+        run: |
+          echo "KAVITA_VER=$(curl -fsSL https://api.github.com/repos/Kareadita/Kavita/releases/latest | jq -r '.tag_name')" >> $GITHUB_ENV
+      -
         name: Buildx and Push
         uses: docker/build-push-action@v5
         with:
@@ -37,8 +42,11 @@ jobs:
           file: Dockerfile
           tags: |
             ${{ env.IMAGE_NAME }}
+            ${{ env.IMAGE_NAME }}-${{ env.KAVITA_VER }}
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
+          build-args: |
+            ATIVAK_VER=${{ env.KAVITA_VER }}
       -
         name: Notification
         uses: sarisia/actions-status-discord@v1
@@ -48,3 +56,4 @@ jobs:
           status: ${{ job.status }}
           description: |
             ${{ env.IMAGE_NAME }}
+            ${{ env.IMAGE_NAME }}-${{ env.KAVITA_VER }}

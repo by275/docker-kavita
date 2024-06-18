@@ -36,7 +36,7 @@ jobs:
           echo "KAVITA_VER=$(curl -fsSL https://api.github.com/repos/Kareadita/Kavita/releases/latest | jq -r '.tag_name')" >> $GITHUB_ENV
       -
         name: Buildx and Push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: Dockerfile

@@ -97,7 +97,7 @@ RUN \
 # 
 FROM base
 LABEL maintainer="by275"
-LABEL org.opencontainers.image.source https://github.com/by275/docker-kavita
+LABEL org.opencontainers.image.source=https://github.com/by275/docker-kavita
 
 ARG DEBIAN_FRONTEND="noninteractive"
 

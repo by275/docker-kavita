@@ -58,10 +58,12 @@ RUN \
 RUN \
     apt-get update && \
     apt-get install -yq --no-install-recommends \
+        sudo python3-pip \
         git libattr1-dev gcc make && \
+    python3 -m pip install meson ninja && \
     git clone https://github.com/kmxz/overlayfs-tools /tmp/ofs && \
     cd /tmp/ofs && \
-    make && \
+    meson setup builddir && cd builddir && meson compile && \
     mkdir -p /bar/usr/local/bin && \
     mv overlay /bar/usr/local/bin/
 

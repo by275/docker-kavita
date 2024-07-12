@@ -30,7 +30,6 @@ RUN \
     ARCH="$(dpkg --print-architecture)" && \
     if [ $ARCH = "amd64" ]; then KAVITA_ARCH="x64"; \
     elif [ $ARCH = "arm64" ]; then KAVITA_ARCH="arm64"; \
-    elif [ $ARCH = "armhf" ]; then KAVITA_ARCH="arm"; \
     else echo "UNKNOWN ARCH: $ARCH" && exit 1; fi && \
     echo "**** installing kavita ${KAVITA_VER} ${KAVITA_ARCH} ****" && \
     downloadURL="https://github.com/Kareadita/Kavita/releases/download/${KAVITA_VER}/kavita-linux-${KAVITA_ARCH}.tar.gz" && \
@@ -47,7 +46,6 @@ RUN \
     ARCH="$(dpkg --print-architecture)" && \
     if [ $ARCH = "amd64" ]; then KAVITA_ARCH="x64"; \
     elif [ $ARCH = "arm64" ]; then KAVITA_ARCH="arm64"; \
-    elif [ $ARCH = "armhf" ]; then KAVITA_ARCH="arm"; \
     else echo "UNKNOWN ARCH: $ARCH" && exit 1; fi && \
     echo "**** installing kavita ${ATIVAK_VER} ${KAVITA_ARCH} ****" && \
     downloadURL="https://github.com/Kareadita/Kavita/releases/download/${ATIVAK_VER}/kavita-linux-${KAVITA_ARCH}.tar.gz" && \

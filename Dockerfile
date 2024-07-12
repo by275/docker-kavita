@@ -8,7 +8,7 @@ FROM ghcr.io/by275/base:ubuntu AS prebuilt
 # 
 FROM base AS builder
 
-ARG KAVITA_VER=v0.5.4
+ARG KAVITA_VER
 ARG ATIVAK_VER
 
 ARG DEBIAN_FRONTEND="noninteractive"
@@ -31,15 +31,21 @@ RUN \
     if [ $ARCH = "amd64" ]; then KAVITA_ARCH="x64"; \
     elif [ $ARCH = "arm64" ]; then KAVITA_ARCH="arm64"; \
     else echo "UNKNOWN ARCH: $ARCH" && exit 1; fi && \
-    echo "**** installing kavita ${KAVITA_VER} ${KAVITA_ARCH} ****" && \
-    downloadURL="https://github.com/Kareadita/Kavita/releases/download/${KAVITA_VER}/kavita-linux-${KAVITA_ARCH}.tar.gz" && \
+    BASE_VER="$(echo "${KAVITA_VER}" | cut -d- -f1)" && \
+    echo "**** installing kavita ${BASE_VER} ${KAVITA_ARCH} ****" && \
+    downloadURL="https://github.com/Kareadita/Kavita/releases/download/${BASE_VER}/kavita-linux-${KAVITA_ARCH}.tar.gz" && \
     curl -sL "$downloadURL" | tar -zxf - -C /bar/kavita --strip-components=1 && \
     mv /bar/kavita/config/appsettings.json /bar/defaults/ && \
     rm -rf /bar/kavita/config
 
 # apply patch
-COPY patch/API.dll_0.5.4.0_patch_1 /bar/kavita/API.dll
-COPY patch/API.pdb_0.5.4.0_patch_1 /bar/kavita/API.pdb
+RUN \
+    PATCH_VER="$(echo "${KAVITA_VER}" | cut -d- -f2)" && \    
+    echo "**** applying patch v${PATCH_VER} ****" && \
+    downloadURL="https://github.com/by275/docker-kavita/releases/download/${KAVITA_VER}/patch.tar.gz" && \
+    curl -sL "$downloadURL" | tar -zxf - -C /bar/kavita && \
+    curl -sL -o /bar/kavita/API.deps.json \
+        "https://github.com/by275/docker-kavita/releases/download/${KAVITA_VER}/API.deps.$(dpkg --print-architecture).json"
 
 # add ativak
 RUN \

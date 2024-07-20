@@ -13,7 +13,7 @@ if [ ! -f "${KAVITA_CONFIG_FILE}" ]; then
         tar -C "$KAVITA_CONFIG_DIR" -zxf "${KAVITA_GDS_TAR}" --strip-components=1
         jq -r '.TokenKey = "super secret unguessable key"' "${KAVITA_CONFIG_FILE}" > /tmp/tmp.json && \
             mv /tmp/tmp.json "${KAVITA_CONFIG_FILE}"
-        fix_ownership "$KAVITA_CONFIG_DIR"
+        fix_ownership "$KAVITA_CONFIG_DIR" /kavita/wwwroot
         exit 0
     fi
     echo "*** Using default appsettings.json"

@@ -34,7 +34,7 @@ RUN \
     BASE_VER="$(echo "${KAVITA_VER}" | cut -d- -f1)" && \
     echo "**** installing kavita ${BASE_VER} ${KAVITA_ARCH} ****" && \
     downloadURL="https://github.com/Kareadita/Kavita/releases/download/${BASE_VER}/kavita-linux-${KAVITA_ARCH}.tar.gz" && \
-    curl -sL "$downloadURL" | tar -zxf - -C /bar/kavita --strip-components=1 && \
+    curl -sL "$downloadURL" | tar -zxf - -C /bar/kavita --strip-components=1 --no-same-owner && \
     mv /bar/kavita/config/appsettings.json /bar/defaults/ && \
     rm -rf /bar/kavita/config
 
@@ -43,7 +43,7 @@ RUN \
     PATCH_VER="$(echo "${KAVITA_VER}" | cut -d- -f2)" && \    
     echo "**** applying patch v${PATCH_VER} ****" && \
     downloadURL="https://github.com/by275/docker-kavita/releases/download/${KAVITA_VER}/patch.tar.gz" && \
-    curl -sL "$downloadURL" | tar -zxf - -C /bar/kavita && \
+    curl -sL "$downloadURL" | tar -zxf - -C /bar/kavita --no-same-owner && \
     curl -sL -o /bar/kavita/API.deps.json \
         "https://github.com/by275/docker-kavita/releases/download/${KAVITA_VER}/API.deps.$(dpkg --print-architecture).json"
 
@@ -55,7 +55,7 @@ RUN \
     else echo "UNKNOWN ARCH: $ARCH" && exit 1; fi && \
     echo "**** installing kavita ${ATIVAK_VER} ${KAVITA_ARCH} ****" && \
     downloadURL="https://github.com/Kareadita/Kavita/releases/download/${ATIVAK_VER}/kavita-linux-${KAVITA_ARCH}.tar.gz" && \
-    curl -sL "$downloadURL" | tar -zxf - -C /bar/ativak --strip-components=1 && \
+    curl -sL "$downloadURL" | tar -zxf - -C /bar/ativak --strip-components=1 --no-same-owner && \
     rm -rf /bar/ativak/config
 
 # add overlayfs-tools
